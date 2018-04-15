@@ -22,7 +22,7 @@
  * Jenkins Pipeline configuration.
  *
  */
-node {
+node('ubuntu') {
     stage ('Build') {
 
         label 'ubuntu'
