@@ -18,14 +18,11 @@
  */
 /**
  *
- *
  * Jenkins Pipeline configuration.
  *
  */
 node('ubuntu') {
     stage ('Build') {
-
-        label 'ubuntu'
 
         git url: 'https://gitbox.apache.org/repos/asf/archiva-redback-components-parent.git'
 
@@ -33,7 +30,7 @@ node('ubuntu') {
                 // Maven installation declared in the Jenkins "Global Tool Configuration"
                 maven: 'Maven 3.5.2', jdk: 'JDK 1.8 (latest)') {
             // Run the maven build
-            sh "mvn clean install -B -U -e -fae -Dmaven.compiler.fork=false -Pci-build"
+            sh "mvn clean install -B -U -e -fae -Dmaven.compiler.fork=false"
 
         } // withMaven will discover the generated Maven artifacts, JUnit Surefire & FailSafe & FindBugs reports...
     }
