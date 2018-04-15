@@ -25,11 +25,13 @@
 node {
     stage ('Build') {
 
+        label 'ubuntu'
+
         git url: 'https://gitbox.apache.org/repos/asf/archiva-redback-components-parent.git'
 
         withMaven(
                 // Maven installation declared in the Jenkins "Global Tool Configuration"
-                maven: 'Maven 3.5.2') {
+                maven: 'Maven 3.5.2', jdk: 'JDK 1.8 (latest)') {
             // Run the maven build
             sh "mvn clean install -B -U -e -fae -Dmaven.compiler.fork=false -Pci-build"
 
