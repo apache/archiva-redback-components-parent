@@ -18,6 +18,7 @@
  */
 /**
  *
+ *
  * Jenkins Pipeline configuration.
  *
  */
@@ -29,18 +30,20 @@ def deploySettings = 'DefaultMavenSettingsProvider.1331204114925'
 
 node(labels) {
 
+    cleanWs()
+
     stage ('Clone Sources') {
-        git url: 'https://gitbox.apache.org/repos/asf/archiva-redback-components-parent.git'
+        checkout scm
     }
 
     stage ('Build') {
         withMaven(
                 maven: buildMvn,
-                jdk: buildJdk
+                jdk: buildJdk,
+                mavenSettingsConfig: deploySettings
         ) {
-            // Run the maven build
             sh "mvn clean install -B -U -e -fae -Dmaven.compiler.fork=false"
-        } // withMaven will discover the generated Maven artifacts, JUnit Surefire & FailSafe & FindBugs reports...
+        } 
     }
 
     stage ('Deploy') {
@@ -49,8 +52,7 @@ node(labels) {
                 jdk: buildJdk,
                 mavenSettingsConfig: deploySettings
         ) {
-            // Run the maven build
-            sh "mvn clean deploy -Dmaven.test.skip=true -B -U -e -fae -Dmaven.compiler.fork=false"
-        } // withMaven will discover the generated Maven artifacts, JUnit Surefire & FailSafe & FindBugs reports...
+            sh "mvn deploy -Dmaven.test.skip=true -B -U -e -fae -Dmaven.compiler.fork=false"
+        }
     }
 }
