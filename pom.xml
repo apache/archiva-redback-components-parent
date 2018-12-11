@@ -41,8 +41,12 @@
     <springVersion>4.1.4.RELEASE</springVersion>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-    <siteUrl>scm:svn:https://svn.apache.org/repos/asf/archiva/site-content/redback/components</siteUrl>
-    <webUrl>http://archiva.apache.org/redback/components</webUrl>
+    <webUrl>https://archiva.apache.org/redback/components</webUrl>
+
+    <scmPubCheckoutDirectory>${basedir}/.site-content</scmPubCheckoutDirectory>
+    <!-- The git repository, where the site content is placed -->
+    <siteRepositoryUrl>scm:git:https://gitbox.apache.org/repos/asf/archiva-web-content-INVALID.git</siteRepositoryUrl>
+    <site.staging.base>${project.basedir}</site.staging.base>
 
 
   </properties>
@@ -54,6 +58,13 @@
     <developerConnection>scm:svn:https://svn.apache.org/repos/asf/archiva/redback/redback-components/trunk/redback-components-parent/</developerConnection>
     <url>http://svn.apache.org/viewvc/archiva/redback/redback-components/trunk/redback-components-parent/</url>
   </scm>
+
+  <distributionManagement>
+    <site>
+      <id>apache.website</id>
+      <url>${siteRepositoryUrl}</url>
+    </site>
+  </distributionManagement>
 
 
   <repositories>
@@ -220,6 +231,14 @@
             <checkinComment>Apache Redback ${project.name}</checkinComment>
           </configuration>
         </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-site-plugin</artifactId>
+          <configuration>
+            <skipDeploy>true</skipDeploy>
+          </configuration>
+        </plugin>
+
       </plugins>
     </pluginManagement>
     <plugins>
@@ -230,7 +249,7 @@
           <excludes>
             <exclude>.gitignore</exclude>
             <exclude>DEPENDENCIES</exclude>
-            <exclude>README.txt</exclude>
+            <exclude>README.*</exclude>
             <exclude>*.sh</exclude>
             <!-- exclude IntelliJ Idea files -->
             <exclude>.idea/**</exclude>
@@ -239,6 +258,7 @@
             <exclude>.classpath</exclude>
             <exclude>.settings</exclude>
             <exclude>.java-version</exclude>
+            <exclude>**/.site-content/**</exclude>
           </excludes>
         </configuration>
         <executions>
@@ -251,23 +271,48 @@
           </execution>
         </executions>
       </plugin>
-          <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-site-plugin</artifactId>
-            <inherited>true</inherited>
-            <executions>
-              <execution>
-                <id>attach-descriptor</id>
-                <goals>
-                  <goal>attach-descriptor</goal>
-                </goals>
-              </execution>
-            </executions>
-            <configuration>
-              <topSiteURL>${siteUrl}</topSiteURL>
-              <relativizeDecorationLinks>false</relativizeDecorationLinks>
-            </configuration>
-          </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-scm-publish-plugin</artifactId>
+        <inherited>false</inherited>
+        <configuration>
+          <checkinComment>Apache Archiva versioned module docs for ${project.version}</checkinComment>
+          <skipDeletedFiles>true</skipDeletedFiles>
+          <content>${project.build.directory}/staging</content>
+          <tryUpdate>true</tryUpdate>
+          <!--
+                    <ignorePathsToDelete>
+                      <path>%regex[^(?!docs/).*$]</path>
+                    </ignorePathsToDelete>
+          -->
+        </configuration>
+        <executions>
+          <execution>
+            <id>scm-publish</id>
+            <phase>site-deploy</phase>
+            <goals>
+              <goal>publish-scm</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-site-plugin</artifactId>
+        <configuration>
+          <skipDeploy>true</skipDeploy>
+          <stagingDirectory>${site.staging.base}/target/staging/redback/components/</stagingDirectory>
+        </configuration>
+        <executions>
+          <execution>
+            <id>attach-descriptor</id>
+            <goals>
+              <goal>attach-descriptor</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
     </plugins>
   </build>
 
@@ -277,6 +322,13 @@
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-project-info-reports-plugin</artifactId>
         <version>${maven-project-info-reports-plugin.version}</version>
+        <reportSets>
+          <reportSet>
+            <reports>
+              <report>index</report>
+            </reports>
+          </reportSet>
+        </reportSets>
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
