@@ -25,6 +25,7 @@
 
 
 pipeline {
+    agent any
     stages{
         stage("Build"){
             agent { node { label 'ubuntu' } }
