@@ -259,7 +259,7 @@
             <exclude>.settings</exclude>
             <exclude>.java-version</exclude>
             <exclude>**/.site-content/**</exclude>
-            <exclude><repository</exclude>
+            <exclude>.repository</exclude>
           </excludes>
         </configuration>
         <executions>
