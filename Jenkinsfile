@@ -16,23 +16,5 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-/**
- *
- *
- * Jenkins Pipeline configuration.
- *
- */
 
-
-pipeline {
-    agent any
-    stages{
-        stage("Build"){
-            agent { node { label 'ubuntu' } }
-            options { timeout(time: 120, unit: 'MINUTES') }
-            steps{
-                asfStandardBuild params:[cmdline:"clean deploy"]
-            }
-        }
-    }
-}
+asfStandardBuild params:[cmdline:"clean deploy"]
