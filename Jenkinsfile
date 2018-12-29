@@ -23,36 +23,15 @@
  *
  */
 
-def labels = 'ubuntu'
-def buildJdk = 'JDK 1.8 (latest)'
-def buildMvn = 'Maven 3.5.2'
-def deploySettings = 'archiva-uid-jenkins'
 
-node(labels) {
-
-    cleanWs()
-
-    stage ('Clone Sources') {
-        checkout scm
-    }
-
-    stage ('Build') {
-        withMaven(
-                maven: buildMvn,
-                jdk: buildJdk,
-                mavenSettingsConfig: deploySettings
-        ) {
-            sh "mvn clean install -B -U -e -fae -Dmaven.compiler.fork=false"
-        } 
-    }
-
-    stage ('Deploy') {
-        withMaven(
-                maven: buildMvn,
-                jdk: buildJdk,
-                mavenSettingsConfig: deploySettings
-        ) {
-            sh "mvn deploy -Dmaven.test.skip=true -B -U -e -fae -Dmaven.compiler.fork=false"
+pipeline {
+    stages{
+        stage("Build"){
+            agent { node { label 'ubuntu' } }
+            options { timeout(time: 120, unit: 'MINUTES') }
+            steps{
+                asfStandardBuild params:[cmdline:"clean deploy"]
+            }
         }
     }
 }
