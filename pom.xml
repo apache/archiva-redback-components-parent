@@ -47,16 +47,14 @@
     <!-- The git repository, where the site content is placed -->
     <siteRepositoryUrl>scm:git:https://gitbox.apache.org/repos/asf/archiva-web-content.git</siteRepositoryUrl>
     <site.staging.base>${project.basedir}</site.staging.base>
-
-
   </properties>
 
   <description>Parent Pom for various components used in Redback, Apache Archiva and Apache Continuum.</description>
 
   <scm>
-    <connection>scm:svn:http://svn.apache.org/repos/asf/archiva/redback/redback-components/trunk/redback-components-parent/</connection>
-    <developerConnection>scm:svn:https://svn.apache.org/repos/asf/archiva/redback/redback-components/trunk/redback-components-parent/</developerConnection>
-    <url>http://svn.apache.org/viewvc/archiva/redback/redback-components/trunk/redback-components-parent/</url>
+    <connection>scm:git:https://github.com/apache/archiva-redback-components-parent.git</connection>
+    <developerConnection>scm:git:https://github.com/apache/archiva-redback-components-parent.git</developerConnection>
+    <url>https://github.com/apache/archiva-redback-components-parent</url>
   </scm>
 
   <distributionManagement>
@@ -65,8 +63,7 @@
       <url>${siteRepositoryUrl}</url>
     </site>
   </distributionManagement>
-
-
+  
   <repositories>
     <repository>
       <id>archiva-repository.releases</id>
@@ -219,7 +216,6 @@
           <artifactId>maven-release-plugin</artifactId>
           <configuration>
             <useReleaseProfile>false</useReleaseProfile>
-            <tagBase>https://svn.apache.org/repos/asf/archiva/redback/redback-components/tags</tagBase>
             <arguments>-Prelease</arguments>
             <goals>clean deploy</goals>
           </configuration>
