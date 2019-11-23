@@ -299,6 +299,7 @@
             <exclude>*.sh</exclude>
             <!-- exclude IntelliJ Idea files -->
             <exclude>.idea/**</exclude>
+            <exclude>**/*.iml</exclude>
             <!-- exclude Eclipse files -->
             <exclude>.project</exclude>
             <exclude>.classpath</exclude>
